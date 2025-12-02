@@ -8,10 +8,9 @@ LABEL org.opencontainers.image.description="Accurate and rapid RiboRNA sequences
 LABEL org.opencontainers.image.source="https://github.com/hzi-bifo/RiboDetector"
 LABEL org.opencontainers.image.licenses="GPL-3.0"
 
-# Install system dependencies (execstack needed for onnxruntime)
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     procps \
-    execstack \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -21,9 +20,11 @@ WORKDIR /app
 COPY setup.py README.md ./
 COPY ribodetector/ ./ribodetector/
 
-# Install the package
-RUN pip install --no-cache-dir . \
-    && execstack -c /usr/local/lib/python3.10/site-packages/onnxruntime/capi/*.so
+# Install onnxruntime first (pin to version without execstack issue)
+RUN pip install --no-cache-dir "onnxruntime==1.14.1"
+
+# Install the package (onnxruntime already satisfied)
+RUN pip install --no-cache-dir .
 
 # Create a non-root user for running the application
 RUN useradd -m -u 1000 ribodetector
