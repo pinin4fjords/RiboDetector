@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+build
+dist
+.eggs
+
+# IDE
+.vscode
+.idea
+*.swp
+
+# Documentation and misc
+*.md
+!README.md
+*.png
+*.jpg
+*.bak
+bak
+
+# CI/CD
+.github
+
+# Docker
+Dockerfile
+.dockerignore
